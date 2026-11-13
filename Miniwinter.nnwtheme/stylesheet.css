@@ -454,6 +454,27 @@ img.wp-smiley {
   max-width: 100%;
 }
 
+/* NetNewsWire 7.3 places the article's main media above the body and its
+   enclosures after it. Captions read like figure captions. */
+audio {
+  width: 100%;
+}
+
+.nnw-enclosure-video iframe {
+  aspect-ratio: 16 / 9;
+  border: 0;
+  border-radius: 6px;
+  width: 100%;
+}
+
+.nnw-enclosure-caption,
+.nnw-primary-image-caption {
+  color: var(--muted);
+  font-size: 0.84em;
+  line-height: 1.45;
+  margin-top: 0.55em;
+}
+
 figure {
   margin-inline: 0;
 }
