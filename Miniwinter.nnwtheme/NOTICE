@@ -1,0 +1,8 @@
+Miniwinter for NetNewsWire, by Rob Feldmann (https://robfeldmann.com).
+
+The colors are the miniwinter palette ("Icy winter") from mini.nvim's mini.hues,
+by Evgeni Chasnovski: https://github.com/nvim-mini/mini.nvim
+mini.nvim is distributed under the MIT License, Copyright (c) 2021 Evgeni Chasnovski.
+
+The masthead and section-head layout take their cue from Ember by Dave Marquard:
+https://github.com/dave-atx/ember-nnw-theme

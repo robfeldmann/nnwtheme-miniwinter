@@ -3,13 +3,13 @@
 <plist version="1.0">
 <dict>
 	<key>ThemeIdentifier</key>
-	<string>com.example.starter</string>
+	<string>com.robfeldmann.nnwtheme.miniwinter</string>
 	<key>Name</key>
-	<string>Starter</string>
+	<string>Miniwinter</string>
 	<key>CreatorHomePage</key>
-	<string>https://example.com</string>
+	<string>https://robfeldmann.com</string>
 	<key>CreatorName</key>
-	<string>Theme Author</string>
+	<string>Rob Feldmann</string>
 	<key>Version</key>
 	<integer>1</integer>
 </dict>

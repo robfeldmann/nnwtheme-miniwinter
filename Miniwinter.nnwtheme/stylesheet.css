@@ -1,0 +1,649 @@
+/* Miniwinter for NetNewsWire
+   Palette: miniwinter by Evgeni Chasnovski, from mini.nvim's mini.hues (MIT;
+   see NOTICE), canonical light and dark values,
+   with the ramp-600 light adaptations for coloured text. The light background
+   ladder is bg_edge #e5edf1 > bg #dce4e8 > bg_mid #bcc4c8 > bg_mid2 #9ca4a7; in
+   dark it runs the other way, bg_edge #051a20 being the deepest. */
+
+:root {
+  color-scheme: light dark;
+
+  --canvas: #dce4e8; /* bg */
+  --surface: #e5edf1; /* bg_edge: code, quotes, popovers */
+  --rule: #bcc4c8; /* bg_mid */
+  --rule-strong: #9ca4a7; /* bg_mid2 */
+  --text: #312e29; /* fg */
+  --text-strong: #0f0d09; /* fg_edge2 */
+  --muted: #4c4944; /* fg_mid; fg_mid2 is too faint for small light text */
+  --accent: #014772; /* azure 600 */
+  --accent-tint: rgb(1 71 114 / 0.09);
+  --accent-edge: rgb(1 71 114 / 0.28);
+  --mark: rgb(86 86 0 / 0.22); /* yellow 600 */
+  --shadow: rgb(15 13 9 / 0.16);
+
+  --measure: 40em;
+  --body-font: -apple-system, BlinkMacSystemFont, ui-sans-serif, "Helvetica Neue", sans-serif;
+  --code-font: ui-monospace, "SF Mono", SFMono-Regular, Menlo, monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --canvas: #11262d;
+    --surface: #051a20;
+    --rule: #2c4249;
+    --rule-strong: #485f67;
+    --text: #d8d4cd;
+    --text-strong: #f4f0e9;
+    --muted: #b8b4ad;
+    --accent: #b3daf9;
+    --accent-tint: rgb(179 218 249 / 0.1);
+    --accent-edge: rgb(179 218 249 / 0.3);
+    --mark: rgb(217 216 170 / 0.22);
+    --shadow: rgb(0 0 0 / 0.4);
+  }
+}
+
+/* iOS replaces this with the reader's Dynamic Type size. macOS leaves the macro
+   literal, so the declaration is invalid there and is dropped. See
+   `npx nnw-theme@2 guide theme-format`. */
+:root {
+  font-size: [[font-size]]px;
+  -webkit-text-size-adjust: none;
+}
+
+/* macOS applies one of these to the text_size_class element; inert on iOS.
+   NetNewsWire emits the capital-L spellings, its own themes select lowercase. */
+.smallText {
+  font-size: 14px;
+}
+
+.mediumText {
+  font-size: 16px;
+}
+
+.largeText {
+  font-size: 17px;
+}
+
+.xlargeText,
+.xLargeText {
+  font-size: 19px;
+}
+
+.xxlargeText,
+.xxLargeText {
+  font-size: 22px;
+}
+
+/* ---------- Canvas ---------- */
+
+html {
+  background: var(--canvas);
+  color: var(--text);
+  font-family: var(--body-font);
+  line-height: 1.65;
+  overflow-wrap: break-word;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  margin: 0;
+  padding: clamp(1.25rem, 5vw, 3.5rem) clamp(1.1rem, 5vw, 3rem) 4rem;
+}
+
+.article {
+  margin: 0 auto;
+  max-width: var(--measure);
+}
+
+::selection {
+  background: var(--accent-edge);
+}
+
+a {
+  color: var(--accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+}
+
+a:hover {
+  color: var(--text-strong);
+  text-decoration-color: var(--accent);
+}
+
+/* ---------- Masthead: feed and author beside the feed icon ---------- */
+
+.masthead {
+  align-items: center;
+  border-bottom: 1px solid var(--rule);
+  display: flex;
+  gap: 1em;
+  justify-content: space-between;
+  padding-bottom: 0.9em;
+}
+
+.source {
+  line-height: 1.4;
+  min-width: 0;
+}
+
+.feed {
+  color: var(--accent);
+  font-size: 0.78em;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.byline {
+  color: var(--muted);
+  font-size: 0.88em;
+  margin-top: 0.15em;
+}
+
+.byline:empty {
+  display: none;
+}
+
+.byline a {
+  color: inherit;
+}
+
+.feed-icon {
+  border-radius: 22%;
+  flex: none;
+  height: 2.3em !important;
+  object-fit: cover;
+  width: 2.3em;
+}
+
+.feed-icon[src=""] {
+  display: none;
+}
+
+/* ---------- Title and dateline ---------- */
+
+.title {
+  color: var(--text-strong);
+  font-size: 1.85em;
+  font-weight: 800;
+  letter-spacing: -0.022em;
+  line-height: 1.1;
+  margin: 0.75em 0 0;
+  text-wrap: balance;
+}
+
+.title a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.title a:hover {
+  color: var(--accent);
+}
+
+.title:has(a:empty) {
+  display: none;
+}
+
+.dateline {
+  font-size: 0.82em;
+  font-variant-caps: all-small-caps;
+  font-weight: 650;
+  letter-spacing: 0.06em;
+  margin: 0.7em 0 0;
+}
+
+.dateline a {
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.dateline a:hover {
+  color: var(--accent);
+}
+
+/* An untitled article (a microblog post) promotes its dateline. */
+.articleDatelineTitle {
+  font-size: 1em;
+  margin-top: 1.25em;
+}
+
+.articleDatelineTitle a {
+  color: var(--text-strong);
+}
+
+.external {
+  color: var(--muted);
+  font-size: 0.82em;
+  margin: 0.35em 0 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.external a {
+  font-family: var(--code-font);
+  font-size: 0.95em;
+}
+
+.external:has(a[href=""]) {
+  display: none;
+}
+
+/* ---------- Body ---------- */
+
+.articleBody {
+  margin-top: 1.6em;
+}
+
+.articleBody > :first-child {
+  margin-top: 0;
+}
+
+p,
+ul,
+ol,
+dl,
+blockquote,
+pre,
+table,
+figure {
+  margin-block: 0 1.1em;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--text-strong);
+  line-height: 1.25;
+  text-wrap: balance;
+}
+
+.articleBody h1,
+.articleBody h2,
+.articleBody h3 {
+  font-weight: 750;
+  letter-spacing: -0.012em;
+  margin: 1.9em 0 0.5em;
+}
+
+.articleBody h1 {
+  font-size: 1.5em;
+}
+
+.articleBody h2 {
+  font-size: 1.32em;
+}
+
+.articleBody h3 {
+  font-size: 1.12em;
+}
+
+/* A short azure tick above section heads marks the turn without colouring
+   the heading itself. */
+.articleBody h1::before,
+.articleBody h2::before {
+  background: var(--accent);
+  border-radius: 2px;
+  content: "";
+  display: block;
+  height: 3px;
+  margin-bottom: 0.55em;
+  width: 1.5em;
+}
+
+.articleBody h4,
+.articleBody h5,
+.articleBody h6 {
+  color: var(--muted);
+  font-size: 0.95em;
+  font-variant-caps: all-small-caps;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  margin: 1.7em 0 0.4em;
+}
+
+strong,
+b {
+  color: var(--text-strong);
+  font-weight: 650;
+}
+
+mark {
+  background: var(--mark);
+  border-radius: 2px;
+  color: inherit;
+  padding: 0 0.15em;
+}
+
+ul,
+ol {
+  padding-left: 1.5em;
+}
+
+li + li,
+li > ul,
+li > ol {
+  margin-top: 0.3em;
+}
+
+li > ul,
+li > ol {
+  margin-bottom: 0;
+}
+
+li::marker {
+  color: var(--muted);
+}
+
+dt {
+  color: var(--text-strong);
+  font-weight: 650;
+}
+
+dd {
+  margin: 0.15em 0 0.8em 1.4em;
+}
+
+blockquote {
+  background: var(--surface);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 6px 6px 0;
+  margin-inline: 0;
+  padding: 0.8em 1.1em;
+}
+
+blockquote > :last-child {
+  margin-bottom: 0;
+}
+
+blockquote blockquote {
+  background: transparent;
+  border-left-color: var(--rule-strong);
+  padding-block: 0;
+}
+
+hr {
+  background: var(--rule-strong);
+  border: 0;
+  height: 1px;
+  margin: 2.2em auto;
+  width: 30%;
+}
+
+sup,
+sub {
+  font-size: 0.75em;
+  line-height: 0;
+}
+
+abbr[title] {
+  text-decoration: underline dotted;
+  text-underline-offset: 0.2em;
+}
+
+/* ---------- Code ---------- */
+
+code,
+kbd,
+samp,
+pre {
+  font-family: var(--code-font);
+  font-size: 0.86em;
+}
+
+:not(pre) > code,
+kbd {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  color: var(--text-strong);
+  padding: 0.06em 0.32em;
+  -webkit-box-decoration-break: clone;
+}
+
+kbd {
+  border-bottom-width: 2px;
+}
+
+pre {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  line-height: 1.55;
+  overflow-x: auto;
+  padding: 0.9em 1.1em;
+}
+
+pre code {
+  font-size: 1em;
+}
+
+/* ---------- Media ---------- */
+
+img,
+video,
+audio,
+iframe {
+  height: auto;
+  max-width: 100%;
+}
+
+img,
+video {
+  border-radius: 6px;
+}
+
+img.emoji,
+img.twemoji,
+img.wp-smiley {
+  border-radius: 0;
+}
+
+/* Feeds size wrappers inline (WordPress captions add 10px to the image);
+   keep every block inside the column. */
+.articleBody div,
+.articleBody figure {
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+figure {
+  margin-inline: 0;
+}
+
+/* Floats clear their own side so a second one never stacks beside the first
+   and leaves its text a sliver between them. */
+.alignleft,
+.articleBody [style*="float:left"],
+.articleBody [style*="float: left"] {
+  clear: left;
+  float: left;
+  margin: 0.3em 1.2em 0.8em 0;
+}
+
+.alignright,
+.articleBody [style*="float:right"],
+.articleBody [style*="float: right"] {
+  clear: right;
+  float: right;
+  margin: 0.3em 0 0.8em 1.2em;
+}
+
+/* A paragraph holds its own floated image, so the next block starts below it. */
+.articleBody p:has(> .alignleft, > .alignright) {
+  display: flow-root;
+}
+
+.aligncenter {
+  display: block;
+  margin-inline: auto;
+}
+
+.wp-caption-text {
+  color: var(--muted);
+  font-size: 0.84em;
+  line-height: 1.45;
+  margin-top: 0.55em;
+}
+
+.wp-block-gallery {
+  display: grid;
+  gap: 0.5em;
+  grid-template-columns: repeat(auto-fit, minmax(9em, 1fr));
+}
+
+.wp-block-gallery > figure {
+  margin: 0;
+}
+
+.wp-block-gallery.is-cropped img {
+  aspect-ratio: 1;
+  height: auto !important;
+  object-fit: cover;
+  width: 100%;
+}
+
+.wp-block-gallery > figcaption {
+  grid-column: 1 / -1;
+}
+
+figure img {
+  display: block;
+}
+
+figcaption {
+  color: var(--muted);
+  font-size: 0.84em;
+  line-height: 1.45;
+  margin-top: 0.55em;
+}
+
+/* ---------- Tables (NetNewsWire wraps them in .nnw-overflow) ---------- */
+
+.nnw-overflow {
+  overflow-x: auto;
+}
+
+table {
+  border-collapse: collapse;
+  font-size: 0.9em;
+  font-variant-numeric: tabular-nums;
+  width: 100%;
+}
+
+th,
+td {
+  border-bottom: 1px solid var(--rule);
+  padding: 0.5em 0.75em;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  border-bottom-color: var(--rule-strong);
+  color: var(--muted);
+  font-variant-caps: all-small-caps;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+/* ---------- Footnotes ---------- */
+
+/* Whether a reference sits in a <sup> varies by feed; neutralize the wrapper
+   at any depth (newsfoot moves the marker into its own container on first
+   click) so every marker gets the same chip. */
+.articleBody sup:has(a.footnote) {
+  font-size: inherit;
+  line-height: inherit;
+  vertical-align: baseline;
+}
+
+.articleBody a.footnote {
+  background: var(--accent-tint);
+  border-radius: 0.4em;
+  box-shadow: inset 0 0 0 1px var(--accent-edge);
+  color: var(--accent);
+  font-size: 0.72em;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  line-height: 1;
+  margin: 0 0.1em;
+  min-width: 1.9em;
+  padding: 0.2em 0.45em;
+  text-decoration: none;
+  top: auto;
+  vertical-align: 0.2em;
+}
+
+.articleBody a.footnote * {
+  color: inherit;
+  font-size: inherit;
+  vertical-align: baseline;
+}
+
+.articleBody a.footnote > * {
+  pointer-events: none;
+}
+
+.articleBody a.footnote:hover,
+.newsfoot-footnote-popover + a.footnote {
+  background: var(--accent);
+  box-shadow: none;
+  color: var(--canvas);
+}
+
+.newsfoot-footnote-popover {
+  background: var(--rule-strong);
+  box-shadow: 0 6px 20px var(--shadow);
+  color: var(--text);
+  font-size: 0.92em;
+  padding: 1px;
+}
+
+.newsfoot-footnote-popover-arrow {
+  background: var(--surface);
+  border: 1px solid var(--rule-strong);
+}
+
+.newsfoot-footnote-popover-inner {
+  background: var(--surface);
+}
+
+/* The notes list at the end of an article reads as endmatter. */
+.articleBody .footnotes,
+.articleBody div.footnote {
+  border-top: 1px solid var(--rule);
+  color: var(--muted);
+  font-size: 0.88em;
+  margin-top: 2.5em;
+  padding-top: 0.6em;
+}
+
+.articleBody .footnotes hr {
+  display: none;
+}
+
+@media (max-width: 34rem) {
+  .title {
+    font-size: 1.6em;
+  }
+
+  /* A full-size float would squeeze its paragraph into a sliver. */
+  .alignleft,
+  .alignright,
+  .articleBody [style*="float"] {
+    max-width: 40%;
+  }
+
+  pre {
+    border-radius: 4px;
+    padding: 0.75em 0.85em;
+  }
+}
